@@ -1,0 +1,22 @@
+---
+driver:
+  name: terraform
+
+provisioner:
+  name: terraform
+
+platforms:
+  - name: github
+
+verifier:
+  name: terraform
+  format: doc
+  systems:
+    - name: default
+      backend: local
+      controls:
+        - check_github_repo_url
+
+
+suites:
+  - name: default
