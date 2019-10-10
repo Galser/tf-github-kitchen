@@ -244,3 +244,22 @@ Now KitchenCI is ready for usage, you can go back and continue with tests from [
 # Tools that are going to be used indirectly
 
 5. **RubyGems** is a package manager for the Ruby programming language that provides a standard format for distributing Ruby programs and libraries (in a self-contained format called a "gem"), a tool designed to easily manage the installation of gems, and a server for distributing them. More here: https://rubygems.org/
+
+# Notes 
+
+1. Worth mentioning that since 22 Aug 2018 ( inspec version `2.2.101` - see PR : https://github.com/inspec/inspec/pull/3318 ) the handling of loading attibures from test outpus (Terraform for example) had changed, and now they should be described first, globally. In our case in file [test/integration/default/inspec.yml](test/integration/default/inspec.yml) :
+```yml
+name: default
+title: Default Kitchen-Terraform
+version: 0.1.0
+attributes:
+  - name: full_repo_web_path
+    type: string
+    required: true
+    description: Terraform output for repo path
+  - name: repo_description
+    type: string
+    required: true
+    description: Terraform output for repo description
+```
+But when all of this clicks together we can use Terraform's outputs directly as InSpec attibures. E.g. for our case neither `repo path` nor `repository description` are hardcoded in test control file.
