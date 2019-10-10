@@ -1,15 +1,11 @@
 # tf-github-kitchen
 TF skills map 200 - GitHub provider + KitchenCI test
 
-# Introduction
-The GitHub provider is used to interact with GitHub organization resources. See detailed description here : [GitHub Provider](https://www.terraform.io/docs/providers/github/index.html)
-
-The provider allows you to manage your GitHub organization's members and teams easily. It needs to be configured with the proper credentials before it can be used. 
-
-This repo demonstrates the usage of some basic features of the GitHub provider, not all of them. 
+# Purpose
+This repo demonstrate use of [GitHub Provider](https://www.terraform.io/docs/providers/github/index.html) to create repository and followed by KitchenCI tests covering this operation. 
 
 # Requirements
-This repo assumes general knowledge about Terraform and GitHub, if not, please get yourself accustomed first by going through [getting started guide for Terraform](https://learn.hashicorp.com/terraform?track=getting-started#getting-started) and [Quick Start Guide for GitHub](https://guides.github.com/activities/hello-world/)
+This repository assumes general knowledge about Terraform and GitHub, if not, please get yourself accustomed first by going through [getting started guide for Terraform](https://learn.hashicorp.com/terraform?track=getting-started#getting-started) and [Quick Start Guide for GitHub](https://guides.github.com/activities/hello-world/)
 
 We also going to use [KitchenCI](https://kitchen.ci/), but all instructions and tests are provided in a dedicated section in README on [How to install KitchenCI](#how-to-install-kitchenci).
 
@@ -35,7 +31,7 @@ To learn more about the mentioned above tools and technologies -  please check s
 
 ## How to test 
 
-- To prepare our test repository execute :
+- Now that you have KitchCI installed, to prepare our **example repository** execute :
     ```
     bundle exec kitchen converge
     ```
@@ -67,7 +63,8 @@ To learn more about the mentioned above tools and technologies -  please check s
        ssh_clone_url = git@github.com:ORGatization/example.git
        Finished converging <default-github> (0m5.46s).
     -----> Kitchen is finished. (0m9.61s)
-    ```    
+    ```
+    E.g. one GitHub repository just had been created.
 - To run tests execute : 
     ```
     bundle exec kitchen verify
@@ -220,8 +217,7 @@ Now KitchenCI is ready for usage, you can go back and continue with tests from [
 
 
 # To do
-- [ ] update readme 
-
+ 
 
 # Done
 - [x] initial README
@@ -233,7 +229,7 @@ Now KitchenCI is ready for usage, you can go back and continue with tests from [
 - [x] prepare Ruby and KitchenCI env
 - [x] create Kitchen test
 - [x] run and tune Kitchen test
-
+- [x] update readme
 
 # Technologies
 
