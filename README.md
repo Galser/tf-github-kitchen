@@ -33,7 +33,7 @@ To learn more about the mentioned above tools and technologies -  please check s
     ```
 - Next step is to install KitchenCI, the task includes multiple steps so it is been provided in a separate section. Please follow instructions in [How to install KitchenCI](#how-to-install-kitchenci)
 
-
+- Let's test!
 
 # How to install KitchenCI
 
@@ -112,8 +112,6 @@ Now KitchenCI is ready for usage, you can go back and continue with tests from [
 
 
 # To do
-- [ ] put basic instructions in readme
-- [ ] prepare Ruby and KitchenCI env
 - [ ] create Kitchen test
 - [ ] run and tune Kitchen test
 - [ ] update readme 
@@ -125,6 +123,8 @@ Now KitchenCI is ready for usage, you can go back and continue with tests from [
 - [x] prepare environment (create tokens and etc)
 - [x] create demo code
 - [x] test code
+- [x] put basic instructions in readme
+- [x] prepare Ruby and KitchenCI env
 
 
 # Technologies
