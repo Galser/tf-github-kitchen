@@ -2,16 +2,16 @@
 TF skills map 200 - GitHub provider + KitchenCI test
 
 # Introduction
-The GitHub provider is used to interact with GitHub organization resources. See detailed desciption here : [GitHub Provider](https://www.terraform.io/docs/providers/github/index.html)
+The GitHub provider is used to interact with GitHub organization resources. See detailed description here : [GitHub Provider](https://www.terraform.io/docs/providers/github/index.html)
 
 The provider allows you to manage your GitHub organization's members and teams easily. It needs to be configured with the proper credentials before it can be used. 
 
-This repo demonstrates usage of some basic feature of the GitHub provider , not all of them. 
+This repo demonstrates the usage of some basic features of the GitHub provider, not all of them. 
 
 # Requirements
 This repo assumes general knowledge about Terraform and GitHub, if not, please get yourself accustomed first by going through [getting started guide for Terraform](https://learn.hashicorp.com/terraform?track=getting-started#getting-started) and [Quick Start Guide for GitHub](https://guides.github.com/activities/hello-world/)
 
-We also going to use [KitchenCI](https://kitchen.ci/), but all instructions and tests are provided dedicated section in README on [How to install KitchenCI](#how-to-install-kitchenci).
+We also going to use [KitchenCI](https://kitchen.ci/), but all instructions and tests are provided in a dedicated section in README on [How to install KitchenCI](#how-to-install-kitchenci).
 
 To learn more about the mentioned above tools and technologies -  please check section [Technologies near the end of the README](#technologies)
 
@@ -21,19 +21,127 @@ To learn more about the mentioned above tools and technologies -  please check s
     ```
     git clone https://github.com/Galser/tf-github-kitchen.git
     ```
-- Previous step should create the folder that contains a copy of the repository. Default name is going to be the same as the name of repository e.g. `tf-github-kitchen`. Locate and open it.
+- The previous step should create a folder that contains a copy of the repository. The default name is going to be the same as the name of repository e.g. `tf-github-kitchen`. Locate and open it.
     ```
     cd tf-github-kitchen
     ```
 - You will need first to create Personal Access Token in GitHub, use [this link](https://github.com/settings/tokens), write down the token, as you are going to see it only once! And note also your organization name. 
 > Note, if yu don't have an organization. you can create one by visiting [this link](https://github.com/settings/organizations), pressing button "New organization" and following all the steps.
-- Export token as environment variable, execute : 
+- Export token as an environment variable, execute : 
     ```
     export GITHUB_TOKEN=YOUR_TOKEN_HERE
     ```
-- Next step is to install KitchenCI, the task includes multiple steps so it is been provided in a separate section. Please follow instructions in [How to install KitchenCI](#how-to-install-kitchenci)
+- The next step is to install KitchenCI, the task includes multiple steps so it is been provided in a separate section. Please follow instructions in [How to install KitchenCI](#how-to-install-kitchenci)
 
-- Let's test!
+## How to test 
+
+- To prepare our test repository execute :
+    ```
+    bundle exec kitchen converge
+    ```
+    The output will start with lines :
+    ```
+    bundle exec kitchen converge      
+    -----> Starting Kitchen (v1.25.0)
+    -----> Creating <default-github>...
+        Terraform v0.12.9
+        + provider.github v2.2.1
+        
+        Your version of Terraform is out of date! The latest version
+        is 0.12.10. You can update by downloading from www.terraform.io/downloads.html
+    $$$$$$ Running command `terraform init -input=false -lock=true -lock-timeout=0s  -upgrade -force-copy -backend=true  -get=true -get-plugins=true -verify-plugins=true` in directory /Users/andrii/labs/skills/tf-github-kitchen
+        
+        Initializing the backend...
+        
+        Initializing provider plugins...
+        - Checking for available provider plugins...
+        - Downloading plugin for provider "github" (hashicorp/github) 2.2.1...
+
+    ```
+    And should end with : 
+    ```
+       Outputs:
+       
+       full_repo_web_path = https://github.com/ORGatization/example
+       repo_description = Example codebase repo
+       ssh_clone_url = git@github.com:ORGatization/example.git
+       Finished converging <default-github> (0m5.46s).
+    -----> Kitchen is finished. (0m9.61s)
+    ```    
+- To run tests execute : 
+    ```
+    bundle exec kitchen verify
+    ```
+    The output going to look like : 
+    ```
+    -----> Starting Kitchen (v1.25.0)
+    -----> Setting up <default-github>...
+        Finished setting up <default-github> (0m0.00s).
+    -----> Verifying <default-github>...
+    $$$$$$ Running command `terraform workspace select kitchen-terraform-default-github` in directory /Users/andrii/labs/skills/tf-github-kitchen
+    $$$$$$ Running command `terraform output -json` in directory /Users/andrii/labs/skills/tf-github-kitchen
+    default: Verifying
+
+    Profile: Default Kitchen-Terraform (default)
+    Version: 0.1.0
+    Target:  local://
+
+    ✔  check_github_repo_url: HTTP GET on https://github.com/ORGatization/example
+        ✔  HTTP GET on https://github.com/ORGatization/example status is expected to cmp == 200
+        ✔  HTTP GET on https://github.com/ORGatization/example body is expected to match "Example codebase repo"
+
+
+    Profile Summary: 1 successful control, 0 control failures, 0 controls skipped
+    Test Summary: 2 successful, 0 failures, 0 skipped
+        Finished verifying <default-github> (0m3.51s).
+    -----> Kitchen is finished. (0m5.54s)    
+    ```
+    As you can see all tests had passed e.g. our Terraform code indeed had created repo within the designated organization with required description.
+- When you've done with checking and all tests, please, do not forget to free resources by running : 
+    ```
+    bundle exec kitchen destroy
+    ```
+    The output should look similar to the following : 
+    ```
+    -----> Starting Kitchen (v1.25.0)
+    -----> Destroying <default-github>...
+        Terraform v0.12.9
+        + provider.github v2.2.1
+        
+        Your version of Terraform is out of date! The latest version
+        is 0.12.10. You can update by downloading from www.terraform.io/downloads.html
+    $$$$$$ Running command `terraform init -input=false -lock=true -lock-timeout=0s  -force-copy -backend=true  -get=true -get-plugins=true -verify-plugins=true` in directory /Users/andrii/labs/skills/tf-github-kitchen
+        
+        Initializing the backend...
+        
+        Initializing provider plugins...
+        
+        The following providers do not have any version constraints in configuration,
+        so the latest version was installed.
+        
+        To prevent automatic upgrades to new major versions that may contain breaking
+        changes, it is recommended to add version = "..." constraints to the
+        corresponding provider blocks in configuration, with the constraint strings
+        suggested below.
+        
+        * provider.github: version = "~> 2.2"
+        
+        Terraform has been successfully initialized!
+    $$$$$$ Running command `terraform workspace select kitchen-terraform-default-github` in directory /Users/andrii/labs/skills/tf-github-kitchen
+    $$$$$$ Running command `terraform destroy -auto-approve -lock=true -lock-timeout=0s -input=false  -parallelism=10 -refresh=true  ` in directory /Users/andrii/labs/skills/tf-github-kitchen
+        github_repository.example: Refreshing state... [id=example]
+        github_repository.example: Destroying... [id=example]
+        github_repository.example: Destruction complete after 0s
+        
+        Destroy complete! Resources: 1 destroyed.
+    $$$$$$ Running command `terraform workspace select default` in directory /Users/andrii/labs/skills/tf-github-kitchen
+        Switched to workspace "default".
+    $$$$$$ Running command `terraform workspace delete kitchen-terraform-default-github` in directory /Users/andrii/labs/skills/tf-github-kitchen
+        Deleted workspace "kitchen-terraform-default-github"!
+        Finished destroying <default-github> (0m2.54s).
+    -----> Kitchen is finished. (0m4.61s)    
+    ```
+    All done, this concludes the instructions section.
 
 # How to install KitchenCI
 
@@ -73,7 +181,7 @@ In order to run our tests we need an isolated Ruby environment, for this purpose
  ```
 For other distributions please refer to your system's appropriate manuals 
 
-- Install required Ruby version and choose it as default local. Run from command line : 
+- Install the required Ruby version and choose it as default local. Run from the command line : 
 ```
 rbenv install 2.3.1
 rbenv local 2.3.1
@@ -89,7 +197,7 @@ Output should like something like this :
   2.6.0
 ```
 Your output can list other versions also, due to the difference in environments, but the important part is that you should have that asterisk (*) symbol in front of the Ruby version 2.3.1 marking it as active at the current moment
-- To simplify our life and to install required Ruby packages we are going to use **Ruby bundler** (See : https://bundler.io/ ). Let's install it. Execute : 
+- To simplify our life and to install required Ruby packages we are going to use **Ruby bundler** (See: https://bundler.io/ ). Let's install it. Execute : 
 ```
 gem install bundler
 ```
@@ -112,8 +220,6 @@ Now KitchenCI is ready for usage, you can go back and continue with tests from [
 
 
 # To do
-- [ ] create Kitchen test
-- [ ] run and tune Kitchen test
 - [ ] update readme 
 
 
@@ -125,6 +231,8 @@ Now KitchenCI is ready for usage, you can go back and continue with tests from [
 - [x] test code
 - [x] put basic instructions in readme
 - [x] prepare Ruby and KitchenCI env
+- [x] create Kitchen test
+- [x] run and tune Kitchen test
 
 
 # Technologies
